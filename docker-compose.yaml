@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: se7a-db
+    environment:
+      POSTGRES_DB: se7a
+      POSTGRES_USER: se7a
+      POSTGRES_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - se7a-network
+
+  app:
+    build: .
+    container_name: se7a-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - se7a-network
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  se7a-network:
+    driver: bridge
